@@ -1,50 +1,59 @@
 package yungshun.chang.springbootticketmanagement.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import yungshun.chang.springbootticketmanagement.model.User;
+import yungshun.chang.springbootticketmanagement.service.UserService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    UserService userService;
+
     @ResponseBody
     @RequestMapping("")
-    public Map<String, Object> getAllUsers() {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", "Get All Users Implementation");
-        return map;
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @ResponseBody
     @RequestMapping("/{id}")
-    public Map<String, Object> getUser(@PathVariable("id") Integer id) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", "Get User Implementation");
-        return map;
+    public User getUser(@PathVariable("id") Integer id) {
+        return userService.getUser(id);
     }
 
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Map<String, Object> createUser() {
+    public Map<String, Object> createUser(@RequestParam(value="userid") Integer userid,
+                                          @RequestParam(value="username") String username) {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", "Create User Implementation");
+        userService.createUser(userid, username);
+        map.put("result", "added");
         return map;
     }
 
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public Map<String, Object> updateUser() {
+    public Map<String, Object> updateUser(@RequestParam(value="userid") Integer userid,
+                                          @RequestParam(value="username") String username) {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", "Update User Implementation");
+        userService.updateUser(userid, username);
+        map.put("result", "updated");
         return map;
     }
 
     @ResponseBody
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
-    public Map<String, Object> deleteUser() {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public Map<String, Object> deleteUser(@PathVariable("id") Integer userid) {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", "Delete User Implementation");
+        userService.deleteUser(userid);
+        map.put("result", "deleted");
         return map;
     }
 }
